@@ -175,7 +175,7 @@ public:
     }
 
     virtual void typeOfMatrix() const {
-        std::cout << "\nI'm a " << row << " x " << columns << " : ";
+        std::cout << "\nI'm a " << row << " x " << columns << " : " << getType();
     }
 
     virtual int getRow() const {

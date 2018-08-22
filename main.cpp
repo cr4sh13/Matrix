@@ -15,14 +15,14 @@ int main() {
         MatrixFactory<int> *intFactory = new MatrixType<int>();
         Matrix<int> *imatrix = intFactory->choiceMatrixType(2, 2);
         std::cout << "MATRIX OF INTEGERS";
-        imatrix->insertRandomValues();
+        imatrix->insertValues();
         imatrix->printMatrix();
         std::cout << std::endl;
 
         MatrixFactory<float> *floatFactory = new MatrixType<float>;
         std::cout << "FIRST MATRIX OF FLOATS";
         Matrix<float> *fmatrix = floatFactory->choiceMatrixType(2, 2);
-        fmatrix->insertRandomValues();
+        fmatrix->insertValues();
         fmatrix->printMatrix();
         std::cout << std::endl;
 
