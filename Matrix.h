@@ -23,9 +23,11 @@ public:
     }
 
 
-    Matrix(int x, int y) {
+    Matrix(int x, int y) throw(std::out_of_range) {
         this->row = x;
         this->columns = y;
+        if(x < 1 || y < 1)
+            throw std::out_of_range("Rows and columns must be positive.");
         value = new T[row * columns];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < columns; j++) {
@@ -97,8 +99,7 @@ public:
                 tmp.setValue(1, i, this->getValue(x, i));
             }
             return tmp;
-        } else
-            throw (std::out_of_range("Row not exist"));
+        } else throw (std::out_of_range("Row not exist"));
     }
 
     virtual Matrix colMatrix(const int y) throw(std::out_of_range) {
@@ -123,8 +124,7 @@ public:
                 }
             *this = tmp;
             return *this;
-        } else
-            throw (std::out_of_range("The Matrix does not indicate values"));
+        } else throw (std::out_of_range("The Matrix does not indicate values"));
     }
 
 

@@ -22,7 +22,7 @@ public:
         return mtx;
     }
 
-    virtual Matrix<T> *createMatrix(int x, int y)  = 0;
+    virtual Matrix<T> *createMatrix(int x, int y) throw(std::out_of_range) = 0;
 
 };
 

@@ -2,60 +2,82 @@
 
 #include "../MatrixType.h"
 
-TEST(Matrix, testSquare) {
-    MatrixFactory<int> *mtp = new MatrixType<int>();
-    Matrix<int> *matrix = mtp->choiceMatrixType(4, 4);
-    ASSERT_EQ(matrix->getType() == "Square matrix", true);
-}
-
-TEST(Matrix, testRectangle) {
-    MatrixFactory<int> *mtp = new MatrixType<int>();
-    Matrix<int> *matrix = mtp->choiceMatrixType(2, 4);
-    ASSERT_EQ(matrix->getType() == "Rectangle matrix", true);
-}
-
-TEST(Matrix, testRow) {
-    MatrixFactory<int> *mtp = new MatrixType<int>();
-    Matrix<int> *matrix = mtp->choiceMatrixType(1, 4);
-    ASSERT_EQ(matrix->getType() == "Row matrix", true);
-}
-
-TEST(Matrix, testCol) {
-    MatrixFactory<int> *mtp = new MatrixType<int>();
-    Matrix<int> *matrix = mtp->choiceMatrixType(4, 1);
-    ASSERT_EQ(matrix->getType() == "Column matrix", true);
-}
-
 TEST(MatrixFactory, intCtorTest) {
-    MatrixFactory<int> *mtp = new MatrixType<int>();
-    Matrix<int> *matrix = mtp->choiceMatrixType(5, 5);
-    int value = matrix->getValue(5, 5);
+    MatrixFactory<int> *mtp = new MatrixType<int>;
+    Matrix<int> *matrix = mtp->choiceMatrixType(3, 3);
+    int value = matrix->getValue(3, 3);
     ASSERT_EQ(value == 0, true);
 }
 
 TEST(MatrixFactory, doubleCtorTest) {
-    MatrixFactory<double> *mtp = new MatrixType<double>();
-    Matrix<double> *matrix = mtp->choiceMatrixType(5, 5);
-    double value = matrix->getValue(5, 5);
+    MatrixFactory<double> *mtp = new MatrixType<double>;
+    Matrix<double> *matrix = mtp->choiceMatrixType(3, 3);
+    double value = matrix->getValue(3, 3);
     ASSERT_EQ(value == 0, true);
+}
+
+TEST(Matrix, testIntConstructorException){
+    ASSERT_THROW(Matrix<int> matrix(0,2), std::out_of_range);
+}
+TEST(Matrix, testFloatConstructorException){
+    ASSERT_THROW(Matrix<float> matrix(0,2), std::out_of_range);
+}
+
+TEST(Matrix, testSquare) {
+    MatrixFactory<int> *mtp = new MatrixType<int>;
+    Matrix<int> *matrix = mtp->choiceMatrixType(3, 3);
+    ASSERT_EQ(matrix->getType() == "Square matrix", true);
+    bool flag = false;
+    if(matrix->getRow() == matrix->getColumns() && matrix->getColumns() > 1 && matrix->getRow() > 1)
+        flag = true;
+    ASSERT_TRUE(flag);
+}
+
+TEST(Matrix, testRectangle) {
+    MatrixFactory<int> *mtp = new MatrixType<int>;
+    Matrix<int> *matrix = mtp->choiceMatrixType(2, 3);
+    ASSERT_EQ(matrix->getType() == "Rectangle matrix", true);
+    bool flag = false;
+    if(matrix->getRow() != matrix->getColumns() && matrix->getColumns() > 1 && matrix->getColumns() > 2)
+        flag = true;
+    ASSERT_TRUE(flag);
+}
+
+TEST(Matrix, testRow) {
+    MatrixFactory<int> *mtp = new MatrixType<int>;
+    Matrix<int> *matrix = mtp->choiceMatrixType(1, 3);
+    ASSERT_EQ(matrix->getType() == "Row matrix", true);
+    bool flag = false;
+    if(matrix->getRow() == 1 && matrix->getColumns() > 0)
+        flag = true;
+    ASSERT_TRUE(flag);
+}
+
+TEST(Matrix, testCol) {
+    MatrixFactory<int> *mtp = new MatrixType<int>;
+    Matrix<int> *matrix = mtp->choiceMatrixType(3, 1);
+    ASSERT_EQ(matrix->getType() == "Column matrix", true);
+    bool flag = false;
+    if(matrix->getColumns() == 1 && matrix->getRow() > 0)
+        flag = true;
+    ASSERT_TRUE(flag);
 }
 
 TEST (Matrix, testGetValue) {
     MatrixFactory<int> *mtp = new MatrixType<int>();
     Matrix<int> *matrix = mtp->choiceMatrixType(5, 5);
-    int value = 1;
-    value = matrix->getValue(2, 3);
-    ASSERT_EQ(value == 0, true);
+    matrix->setValue(2,3,100);
+    ASSERT_EQ(matrix->getValue(2,3) == 100, true);
+    EXPECT_THROW(matrix->getValue(10,10), std::out_of_range);
 }
 
 TEST(Matrix, intTestSetValue) {
     MatrixFactory<int> *mtp = new MatrixType<int>();
     Matrix<int> *matrix = mtp->choiceMatrixType(5, 5);
     matrix->setValue(2, 3, 1);
-    matrix->setValue(2, 3, 5);
-    int value = 0;
-    value = matrix->getValue(2, 3);
-    ASSERT_EQ(value == 5, true);
+    ASSERT_EQ(matrix->getValue(2,3) == 1, true);
+    EXPECT_THROW(matrix->setValue(10,10,10), std::out_of_range);
+
 }
 
 TEST(Matrix, doubleTestSetValue) {
@@ -94,6 +116,11 @@ TEST(Matrix, TestReturnRow) {
     }
 
     ASSERT_EQ(ans, true);
+    bool flag = false;
+    if(matrix1->getRow() == 1 && matrix1->getColumns() >= 1)
+        flag = true;
+    ASSERT_TRUE(flag);
+    EXPECT_THROW(matrix1->rowMatrix(10), std::out_of_range);
 }
 
 TEST(Matrix, TestReturnCol) {
@@ -122,6 +149,11 @@ TEST(Matrix, TestReturnCol) {
     }
 
     ASSERT_EQ(ans, true);
+    bool flag = false;
+    if(matrix1->getRow() >=1  && matrix1->getColumns() == 1)
+        flag = true;
+    ASSERT_TRUE(flag);
+    EXPECT_THROW(matrix1->colMatrix(10), std::out_of_range);
 }
 
 
@@ -188,6 +220,9 @@ TEST(Matrix, TestOperatorMultpl) {
         }
     }
     ASSERT_EQ(ans, true);
+    Matrix<int> firstMatrix(3,3);
+    Matrix<int> secondMatrix(2,2);
+    EXPECT_THROW(firstMatrix*secondMatrix, std::out_of_range);
 }
 
 TEST(Matrix, TestOperatorMultplAdd) {
@@ -223,4 +258,7 @@ TEST(Matrix, TestOperatorMultplAdd) {
         }
     }
     ASSERT_EQ(ans, true);
+    Matrix<int> firstMatrix(3,3);
+    Matrix<int> secondMatrix(3,2);
+    EXPECT_THROW(firstMatrix+secondMatrix, std::out_of_range);
 }
